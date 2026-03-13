@@ -15,6 +15,9 @@ function App() {
           Name: Lester Sunga<br />
           Email: lstrsng@gmail.com<br />
           Other Personal Info: 
+          <a href="https://github.com/LstrSng/sunga-webprog">
+            https://github.com/LstrSng/sunga-webprog
+          </a>
         </p>
       </header>
     </div>
