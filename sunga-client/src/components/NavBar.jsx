@@ -36,7 +36,7 @@ const NavBar = () => {
           </div>
 
           <div className="leading-tight">
-            <p className="text-base font-bold tracking-tight text-zinc-950 sm:text-lg">
+            <p className="text-base font-bold tracking-tight text-zinc-500 sm:text-lg">
               LS Studio
             </p>
             <p className="text-[10px] uppercase tracking-[0.35em] text-zinc-500 sm:text-[11px]">

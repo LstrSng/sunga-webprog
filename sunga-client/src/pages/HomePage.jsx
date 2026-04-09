@@ -93,7 +93,7 @@ const HomePage = () => {
             <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-amber-600">
               Featured Strengths
             </p>
-            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
+            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-500">
               Built for elegant, image-rich storytelling
             </h2>
           </div>

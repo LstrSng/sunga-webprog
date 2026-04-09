@@ -44,7 +44,7 @@ const AboutPage = () => {
               A design practice shaped by clean structure and strong visual atmosphere.
             </h1>
 
-            <p className="mt-5 max-w-xl text-sm leading-7 text-zinc-600 sm:text-base">
+            <p className="mt-5 max-w-xl text-sm leading-7 text-zinc-500 sm:text-base">
               LS Studio focuses on digital experiences that feel calm,
               confident, and editorial. The work combines visual storytelling,
               minimalist composition, and thoughtful content flow to create
@@ -69,13 +69,17 @@ const AboutPage = () => {
             key={value.title}
             className="rounded-[1.75rem] border border-zinc-200 bg-white p-6 shadow-sm"
           >
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-500">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-600">
               Studio Value
             </p>
+
             <h2 className="mt-3 text-xl font-semibold text-zinc-900">
               {value.title}
             </h2>
-            <p className="mt-3 text-sm leading-7 text-zinc-600">{value.text}</p>
+
+            <p className="mt-3 text-sm leading-7 text-zinc-700">
+              {value.text}
+            </p>
           </article>
         ))}
       </section>
@@ -85,6 +89,7 @@ const AboutPage = () => {
           <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-amber-600">
             Process & Perspective
           </p>
+
           <h2 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
             How the studio approaches creative work
           </h2>
@@ -96,7 +101,8 @@ const AboutPage = () => {
               <h3 className="text-lg font-semibold text-zinc-900">
                 Strategy First
               </h3>
-              <p className="mt-3 text-sm leading-7 text-zinc-600">
+
+              <p className="mt-3 text-sm leading-7 text-zinc-700">
                 Every project begins with message clarity, audience understanding,
                 and a visual direction that supports both brand and usability.
               </p>
@@ -106,7 +112,8 @@ const AboutPage = () => {
               <h3 className="text-lg font-semibold text-zinc-900">
                 Design With Rhythm
               </h3>
-              <p className="mt-3 text-sm leading-7 text-zinc-600">
+
+              <p className="mt-3 text-sm leading-7 text-zinc-700">
                 Spacing, contrast, and layout flow are treated as storytelling
                 tools, helping each page feel dynamic without becoming crowded.
               </p>
@@ -116,7 +123,8 @@ const AboutPage = () => {
               <h3 className="text-lg font-semibold text-zinc-900">
                 Refine for Impact
               </h3>
-              <p className="mt-3 text-sm leading-7 text-zinc-600">
+
+              <p className="mt-3 text-sm leading-7 text-zinc-700">
                 The final layer focuses on polish: typography, imagery, CTA
                 treatment, and consistency across every section of the experience.
               </p>
