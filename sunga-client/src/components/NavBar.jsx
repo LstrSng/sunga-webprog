@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import Button from './Button';
 
 const links = [
   { label: 'Home', to: '/' },
@@ -62,6 +63,15 @@ const NavBar = () => {
             </NavLink>
           ))}
         </nav>
+
+        <div className="hidden items-center gap-2 sm:flex">
+          <Button to="/auth/signin" variant="ghost" className="px-4 py-2 text-[10px] tracking-[0.2em]">
+            Sign In
+          </Button>
+          <Button to="/auth/signup" variant="primary" className="px-4 py-2 text-[10px] tracking-[0.2em]">
+            Sign Up
+          </Button>
+        </div>
       </div>
     </header>
   );
