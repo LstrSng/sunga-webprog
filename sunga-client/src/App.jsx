@@ -7,31 +7,35 @@ import AboutPage from "./pages/LandingPages/AboutPage";
 import ArticleListPage from "./pages/LandingPages/ArticleListPage";
 
 import AuthLayout from "./layouts/AuthLayout";
+import DashLayout from "./layouts/DashLayout";
 import SignInPage from "./pages/AuthPages/SignInPage";
 import SignUpPage from "./pages/AuthPages/SignUpPage";
+import DashboardPage from "./pages/DashboardPages/DashboardPage";
+import ReportsPage from "./pages/DashboardPages/ReportsPage";
+import UsersPage from "./pages/DashboardPages/UserPage";
 
 import NotFoundPage from "./pages/NotFoundPage";
 
 const routes = [
   {
-    path: "/",
+    path: '/',
     element: <Layout />,
     errorElement: <NotFoundPage />,
     children: [
       {
-        path: "",
+        path: '',
         element: <HomePage />,
       },
       {
-        path: "about",
+        path: 'about',
         element: <AboutPage />,
       },
       {
-        path: "articles",
+        path: 'articles',
         element: <ArticleListPage />,
       },
       {
-        path: "articles/:name",
+        path: 'articles/:name',
         element: <ArticlePage />,
       },
     ],
@@ -48,6 +52,25 @@ const routes = [
       {
         path: "signup",
         element: <SignUpPage />,
+      },
+    ],
+  },
+  {
+    path: "dashboard/",
+    element: <DashLayout />,
+    errorElement: <NotFoundPage />,
+    children: [
+      {
+        path: "",
+        element: <DashboardPage />,
+      },
+      {
+        path: "reports",
+        element: <ReportsPage />,
+      },
+      {
+        path: "users",
+        element: <UsersPage />,
       },
     ],
   },
