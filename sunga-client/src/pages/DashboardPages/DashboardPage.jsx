@@ -1,4 +1,4 @@
-import { BarChart } from "@mui/x-charts/BarChart";
+import { LineChart } from "@mui/x-charts/LineChart";
 import { DataGrid } from "@mui/x-data-grid";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
@@ -83,26 +83,35 @@ function DashboardPage() {
 
       <Stack direction={{ xs: "column", xl: "row" }} spacing={3} alignItems="stretch">
         <Paper sx={{ flex: 1, p: 2 }} elevation={1}>
-          <BarChart
+          <Typography variant="h6" gutterBottom>
+            User Growth Trend
+          </Typography>
+          <LineChart
             series={[
-              { data: [35, 44, 24, 34], label: "Series 1", color: "#3f51f5" },
-              { data: [51, 6, 49, 30], label: "Series 2", color: "#ffb300" },
+              { data: [12, 18, 15, 24, 28, 31], label: "Active Users", color: "#3f51f5", curve: "monotoneX" },
+              { data: [8, 10, 14, 19, 21, 27], label: "New Users", color: "#00acc1", curve: "monotoneX" },
             ]}
             height={300}
-            xAxis={[{ data: ["Q1", "Q2", "Q3", "Q4"], scaleType: "band", label: "Quarters" }]}
+            xAxis={[{ data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"], scaleType: "point", label: "Month" }]}
           />
         </Paper>
 
         <Paper sx={{ width: { xs: "100%", xl: 300 }, p: 2 }} elevation={1}>
+          <Typography variant="h6" gutterBottom>
+            User Segments
+          </Typography>
           <PieChart
             series={[
               {
                 data: [
-                  { id: 0, value: 10, label: "Series A", color: "#3f51f5" },
-                  { id: 1, value: 15, label: "Series B", color: "#ffb300" },
-                  { id: 2, value: 20, label: "Series C", color: "#ff5252" },
+                  { id: 0, value: 24, label: "Design", color: "#7c4dff" },
+                  { id: 1, value: 18, label: "Marketing", color: "#ffb300" },
+                  { id: 2, value: 12, label: "Support", color: "#26a69a" },
                 ],
+                innerRadius: 45,
                 outerRadius: 90,
+                paddingAngle: 3,
+                cornerRadius: 4,
               },
             ]}
             width={260}

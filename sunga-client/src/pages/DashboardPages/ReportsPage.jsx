@@ -50,43 +50,49 @@ function ReportsPage() {
 			<Stack direction={{ xs: "column", xl: "row" }} spacing={3}>
 				<Paper sx={{ flex: 1, p: 2 }} elevation={1}>
 					<Typography variant="h6" gutterBottom>
-						Performance Overview
+						Revenue Forecast
 					</Typography>
 					<LineChart
 						height={320}
-						series={[{ data: monthlyData, label: "Growth", curve: "monotoneX", color: "#1976d2" }]}
+						series={[
+							{ data: monthlyData, label: "Current Year", curve: "monotoneX", color: "#1976d2" },
+							{ data: [14, 20, 18, 25, 29, 33, 31, 37, 35, 41, 46, 50], label: "Previous Year", curve: "monotoneX", color: "#90caf9" },
+						]}
 						xAxis={[{ scaleType: "point", data: monthLabels }]}
 					/>
 				</Paper>
 
 				<Paper sx={{ flex: 1, p: 2 }} elevation={1}>
 					<Typography variant="h6" gutterBottom>
-						Quarterly Comparison
+						Regional Output
 					</Typography>
 					<BarChart
 						height={320}
 						series={[
-							{ data: quarterlyData, label: "Series 1", color: "#3f51f5" },
-							{ data: comparisonData, label: "Series 2", color: "#ffb300" },
+							{ data: quarterlyData, label: "North", color: "#5c6bc0" },
+							{ data: comparisonData, label: "South", color: "#ffb300" },
 						]}
-						xAxis={[{ data: ["Q1", "Q2", "Q3", "Q4"], scaleType: "band" }]}
+						xAxis={[{ data: ["Q1", "Q2", "Q3", "Q4"], scaleType: "band", label: "Quarter" }]}
 					/>
 				</Paper>
 			</Stack>
 
 			<Paper sx={{ p: 2, maxWidth: 420 }} elevation={1}>
 				<Typography variant="h6" gutterBottom>
-					Category Split
+					Traffic Sources
 				</Typography>
 				<PieChart
 					series={[
 						{
 							data: [
-								{ id: 0, value: 10, label: "Series A", color: "#3f51f5" },
-								{ id: 1, value: 15, label: "Series B", color: "#ffb300" },
-								{ id: 2, value: 20, label: "Series C", color: "#ff5252" },
+								{ id: 0, value: 28, label: "Organic", color: "#42a5f5" },
+								{ id: 1, value: 20, label: "Ads", color: "#ab47bc" },
+								{ id: 2, value: 16, label: "Referral", color: "#ff7043" },
 							],
+							innerRadius: 50,
 							outerRadius: 95,
+							paddingAngle: 3,
+							cornerRadius: 4,
 						},
 					]}
 					width={360}
