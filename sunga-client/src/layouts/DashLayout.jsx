@@ -176,7 +176,7 @@ const DashLayout = () => {
 
   return (
     <>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", width: "100%", maxWidth: "100vw", overflowX: "hidden" }}>
         <CssBaseline />
         <AppBar position="fixed" open={open}>
           <Toolbar>
@@ -224,7 +224,7 @@ const DashLayout = () => {
           </DrawerHeader>
           <Divider />
           <List>
-            {dashboardNavItems.map(({ label, to, icon: Icon }) => (
+            {dashboardNavItems.map(({ label, to, icon }) => (
               <ListItem key={to} disablePadding sx={{ display: "block" }}>
                 <ListItemButton
                   component={Link}
@@ -243,7 +243,7 @@ const DashLayout = () => {
                       justifyContent: "center",
                     }}
                   >
-                    <Icon />
+                    <Box component={icon} />
                   </ListItemIcon>
                   <ListItemText
                     primary={label}
@@ -254,7 +254,17 @@ const DashLayout = () => {
             ))}
           </List>
         </Drawer>
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            minWidth: 0,
+            width: 0,
+            maxWidth: "100%",
+            p: { xs: 2, sm: 3 },
+            overflowX: "hidden",
+          }}
+        >
           <DrawerHeader />
           <Outlet />
         </Box>
