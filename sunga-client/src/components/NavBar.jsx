@@ -9,10 +9,10 @@ const links = [
 
 const NavBar = () => {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-zinc-200 bg-white/90 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <NavLink to="/" className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-300 text-zinc-950 shadow-md">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-zinc-200/80 bg-white/85 shadow-sm shadow-zinc-950/5 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:flex-nowrap lg:px-8">
+        <NavLink to="/" className="flex min-w-0 items-center gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-zinc-950 text-amber-300 shadow-md shadow-zinc-950/10">
             <svg
               viewBox="0 0 48 48"
               className="h-7 w-7"
@@ -36,22 +36,22 @@ const NavBar = () => {
             </svg>
           </div>
 
-          <div className="leading-tight">
-            <p className="text-base font-bold tracking-tight text-zinc-500 sm:text-lg">
+          <div className="min-w-0 leading-tight">
+            <p className="text-base font-bold tracking-tight text-zinc-950 sm:text-lg">
               LS Studio
             </p>
-            <p className="text-[10px] uppercase tracking-[0.35em] text-zinc-500 sm:text-[11px]">
+            <p className="truncate text-[10px] uppercase tracking-[0.24em] text-zinc-500 sm:text-[11px]">
               Visual Stories & Design
             </p>
           </div>
         </NavLink>
 
-        <nav className="flex items-center gap-1 rounded-full border border-zinc-200 bg-zinc-50 p-1 shadow-sm">
+        <nav className="order-3 flex w-full items-center gap-1 overflow-x-auto rounded-full border border-zinc-200 bg-zinc-50 p-1 shadow-sm lg:order-none lg:w-auto">
           {links.map((link) => (
             <NavLink key={link.to} to={link.to} end={link.to === '/'}>
               {({ isActive }) => (
                 <span
-                  className={`inline-flex rounded-full px-4 py-2 text-sm font-medium transition ${
+                  className={`inline-flex whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition ${
                     isActive
                       ? 'bg-zinc-900 text-white shadow-sm'
                       : 'text-zinc-600 hover:bg-white hover:text-zinc-950'
@@ -65,10 +65,10 @@ const NavBar = () => {
         </nav>
 
         <div className="hidden items-center gap-2 sm:flex">
-          <Button to="/auth/signin" variant="ghost" className="px-4 py-2 text-[10px] tracking-[0.2em]">
+          <Button to="/auth/signin" variant="ghost" className="px-4 py-2 text-[10px] tracking-[0.16em]">
             Sign In
           </Button>
-          <Button to="/auth/signup" variant="primary" className="px-4 py-2 text-[10px] tracking-[0.2em]">
+          <Button to="/auth/signup" variant="primary" className="px-4 py-2 text-[10px] tracking-[0.16em]">
             Sign Up
           </Button>
         </div>

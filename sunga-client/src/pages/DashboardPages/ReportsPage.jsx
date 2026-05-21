@@ -10,6 +10,7 @@ import { BarChart } from "@mui/x-charts/BarChart";
 import { Gauge } from "@mui/x-charts/Gauge";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { DataGrid } from "@mui/x-data-grid";
+import { primaryDashboardButtonSx } from "../../utils/dashboardButtonStyles";
 
 const columns = [
 	{ field: "id", headerName: "ID", width: 90 },
@@ -73,6 +74,12 @@ const categoryReports = [
 	{ label: "Inventory", value: 8, color: "#ff4d5d" },
 	{ label: "Finance", value: 6, color: "#20b8e8" },
 ];
+
+const panelSx = {
+	borderRadius: 3,
+	borderColor: "rgba(212, 212, 216, 0.9)",
+	boxShadow: "0 12px 30px rgba(24, 24, 27, 0.06)",
+};
 
 const escapeHtml = (value) =>
 	String(value ?? "")
@@ -482,33 +489,18 @@ const ReportsPage = () => {
 
 	return (
 		<Box sx={{ width: "100%", maxWidth: "100%", minWidth: 0, textAlign: "left" }}>
-			<Stack
-				direction={{ xs: "column", md: "row" }}
-				justifyContent="space-between"
-				alignItems={{ xs: "flex-start", md: "center" }}
-				spacing={2}
-				sx={{ mb: 3 }}
-			>
-				<Box sx={{ maxWidth: 760 }}>
-					<Typography variant="h4" sx={{ mb: 0.5, fontWeight: 600, letterSpacing: 0 }}>
-						Reports
-					</Typography>
-					<Typography variant="body1" color="text.secondary">
-						Report analytics overview showing generated reports,
-						category breakdown, and current completion performance.
-					</Typography>
-				</Box>
-
-				<Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
-					<Button variant="contained" sx={{ minHeight: 40 }}>Generate</Button>
-					<Button variant="outlined" onClick={handlePrint} sx={{ minHeight: 40 }}>Print PDF</Button>
-					<Button variant="outlined" sx={{ minHeight: 40 }}>Filter</Button>
-				</Stack>
+			<Stack direction="row" sx={{ mb: 2, justifyContent: "space-between", alignItems: "center" }}>
+				<Typography variant="h4" sx={{ fontWeight: 700, color: "#18181b" }}>
+					Reports
+				</Typography>
+				<Button variant="contained" onClick={handlePrint} sx={primaryDashboardButtonSx}>
+					Print PDF
+				</Button>
 			</Stack>
 
 			<Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ mb: 3 }}>
 				{summaryCards.map((item) => (
-					<Card key={item.label} variant="outlined" sx={{ flex: 1 }}>
+					<Card key={item.label} variant="outlined" sx={{ ...panelSx, flex: 1 }}>
 						<CardContent sx={{ py: 2 }}>
 							<Typography variant="body2" color="text.secondary">
 								{item.label}
@@ -525,7 +517,7 @@ const ReportsPage = () => {
 			</Stack>
 
 			<Stack ref={printRef} spacing={3}>
-				<Card variant="outlined">
+				<Card variant="outlined" sx={panelSx}>
 					<CardContent sx={{ p: { xs: 2, md: 3 } }}>
 						<Stack
 							direction={{ xs: "column", md: "row" }}
@@ -565,7 +557,7 @@ const ReportsPage = () => {
 				</Card>
 
 				<Stack direction={{ xs: "column", lg: "row" }} spacing={3}>
-					<Card variant="outlined" sx={{ flex: 1, minWidth: 0 }}>
+					<Card variant="outlined" sx={{ ...panelSx, flex: 1, minWidth: 0 }}>
 						<CardContent sx={{ p: { xs: 2, md: 3 } }}>
 							<Typography variant="h6" sx={{ fontWeight: 600 }}>
 								Report Category Share
@@ -592,7 +584,7 @@ const ReportsPage = () => {
 						</CardContent>
 					</Card>
 
-					<Card variant="outlined" sx={{ flex: 1, minWidth: 0 }}>
+					<Card variant="outlined" sx={{ ...panelSx, flex: 1, minWidth: 0 }}>
 						<CardContent sx={{ p: { xs: 2, md: 3 } }}>
 							<Typography variant="h6" sx={{ fontWeight: 600 }}>
 								Completion Rate
@@ -614,7 +606,7 @@ const ReportsPage = () => {
 					</Card>
 				</Stack>
 
-				<Card variant="outlined">
+				<Card variant="outlined" sx={panelSx}>
 					<CardContent sx={{ p: { xs: 2, md: 3 } }}>
 						<Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
 							Report Records
@@ -634,6 +626,13 @@ const ReportsPage = () => {
 								checkboxSelection
 								disableRowSelectionOnClick
 								sx={{
+									border: 0,
+									"& .MuiDataGrid-columnHeaders": {
+										backgroundColor: "#fafafa",
+									},
+									"& .MuiDataGrid-row:hover": {
+										backgroundColor: "#fafafa",
+									},
 									"& .MuiDataGrid-cell, & .MuiDataGrid-columnHeader": {
 										outline: "none",
 									},

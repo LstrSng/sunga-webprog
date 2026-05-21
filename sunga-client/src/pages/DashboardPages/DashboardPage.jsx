@@ -53,6 +53,12 @@ const rows = [
 	{ id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
 ];
 
+const panelSx = {
+	borderRadius: 3,
+	borderColor: "rgba(212, 212, 216, 0.9)",
+	boxShadow: "0 12px 30px rgba(24, 24, 27, 0.06)",
+};
+
 const DashboardPage = () => {
 	const usersWithAge = rows.filter((row) => row.age !== null);
 	const averageAge = (
@@ -63,16 +69,16 @@ const DashboardPage = () => {
 		<Box sx={{ width: "100%", maxWidth: "100%", minWidth: 0, textAlign: "left" }}>
 			<Stack spacing={3}>
 				<Box>
-					<Typography variant="h4" sx={{ mb: 0.5, fontWeight: 600, letterSpacing: 0 }}>
+					<Typography variant="h4" sx={{ mb: 0.5, fontWeight: 700, letterSpacing: 0, color: "#18181b" }}>
 						Dashboard
 					</Typography>
 					<Typography variant="body1" color="text.secondary">
-						Overview and summary using the original dashboard sample users.
+						Overview and summary of users, activity, and report data.
 					</Typography>
 				</Box>
 
 				<Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-					<Card variant="outlined" sx={{ minWidth: 160 }}>
+					<Card variant="outlined" sx={{ ...panelSx, minWidth: 160, flex: 1 }}>
 						<CardContent>
 							<Typography variant="body2" color="text.secondary">
 								Total Users
@@ -83,7 +89,7 @@ const DashboardPage = () => {
 						</CardContent>
 					</Card>
 
-					<Card variant="outlined" sx={{ minWidth: 160 }}>
+					<Card variant="outlined" sx={{ ...panelSx, minWidth: 160, flex: 1 }}>
 						<CardContent>
 							<Typography variant="body2" color="text.secondary">
 								Average Age
@@ -96,7 +102,7 @@ const DashboardPage = () => {
 				</Stack>
 
 				<Stack direction={{ xs: "column", xl: "row" }} spacing={3} alignItems="stretch">
-					<Paper sx={{ flex: 1, p: { xs: 2, md: 3 }, minWidth: 0 }} variant="outlined">
+					<Paper sx={{ ...panelSx, flex: 1, p: { xs: 2, md: 3 }, minWidth: 0 }} variant="outlined">
 						<Typography variant="h6" sx={{ fontWeight: 600 }}>
 							User Growth Trend
 						</Typography>
@@ -130,7 +136,7 @@ const DashboardPage = () => {
 						/>
 					</Paper>
 
-					<Paper sx={{ width: { xs: "100%", xl: 340 }, p: { xs: 2, md: 3 } }} variant="outlined">
+					<Paper sx={{ ...panelSx, width: { xs: "100%", xl: 340 }, p: { xs: 2, md: 3 } }} variant="outlined">
 						<Typography variant="h6" sx={{ fontWeight: 600 }}>
 							User Segments
 						</Typography>
@@ -159,7 +165,7 @@ const DashboardPage = () => {
 					</Paper>
 				</Stack>
 
-				<Paper sx={{ p: { xs: 2, md: 3 }, minWidth: 0 }} variant="outlined">
+				<Paper sx={{ ...panelSx, p: { xs: 2, md: 3 }, minWidth: 0 }} variant="outlined">
 					<Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
 						Users Overview
 					</Typography>
@@ -177,7 +183,14 @@ const DashboardPage = () => {
 							pageSizeOptions={[5]}
 							checkboxSelection
 							disableRowSelectionOnClick
-							sx={{
+								sx={{
+								border: 0,
+								"& .MuiDataGrid-columnHeaders": {
+									backgroundColor: "#fafafa",
+								},
+								"& .MuiDataGrid-row:hover": {
+									backgroundColor: "#fafafa",
+								},
 								"& .MuiDataGrid-cell, & .MuiDataGrid-columnHeader": {
 									outline: "none",
 								},

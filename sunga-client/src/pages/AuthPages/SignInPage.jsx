@@ -1,23 +1,49 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
+import { useAuth } from '../../contexts/AuthContext';
 
 const inputClasses =
-	'mt-2 w-full rounded-xl border border-zinc-300 bg-zinc-100 px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-900 focus:bg-zinc-50';
+	'mt-2 w-full rounded-2xl border border-zinc-300 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-900 focus:bg-white focus:ring-4 focus:ring-zinc-900/5';
 
-const actionButtonClassName = 'w-full rounded-xl py-3 text-[11px] tracking-[0.2em]';
+const actionButtonClassName = 'w-full rounded-2xl py-3 text-[11px] tracking-[0.16em]';
 
 const SignInPage = () => {
+	const { login } = useAuth();
+	const navigate = useNavigate();
+	const location = useLocation();
+	const from = location.state?.from?.pathname || '/dashboard';
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [error, setError] = useState('');
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setError('');
+		try {
+			await login({ email, password });
+			navigate(from, { replace: true });
+		} catch (err) {
+			setError(err.message || 'Login failed. Please try again.');
+		}
+	};
 	return (
-		<>
-			<p className="inline-flex rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-zinc-500">
-				Welcome Back
-			</p>
-			<h1 className="mt-4 text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">Log In</h1>
+		<div className="relative lg:pt-6">
+			<div className="mb-6 flex w-full justify-end lg:absolute lg:right-0 lg:top-0 lg:mb-0">
+				<Link
+					to="/"
+					className="inline-flex w-fit items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-500 transition hover:border-zinc-300 hover:bg-white hover:text-zinc-900"
+				>
+					<span aria-hidden="true" className="text-base leading-none">←</span>
+					Back to Home
+				</Link>
+			</div>
+			<h1 className="mt-0 text-3xl font-bold tracking-normal text-zinc-950 sm:text-4xl">Log In</h1>
 			<p className="mt-3 text-sm leading-6 text-zinc-600">
-				Access your account with a clean and polished sign-in experience.
+				Sign in to manage articles, users, and dashboard reports.
 			</p>
 
-			<form className="mt-8 space-y-5">
+			<form className="mt-8 space-y-5" onSubmit={handleSubmit}>
 				<div>
 					<label htmlFor="signin-email" className="text-sm font-medium text-zinc-700">
 						Email Address
@@ -25,9 +51,12 @@ const SignInPage = () => {
 					<input
 						id="signin-email"
 						type="email"
-						placeholder="Placeholder"
+						placeholder="you@example.com"
 						autoComplete="email"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
 						className={inputClasses}
+						required
 					/>
 				</div>
 
@@ -38,12 +67,15 @@ const SignInPage = () => {
 					<input
 						id="signin-password"
 						type="password"
-						placeholder="Placeholder"
+						placeholder="Enter your password"
 						autoComplete="current-password"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
 						className={inputClasses}
+						required
 					/>
 					<p className="mt-2 text-xs leading-5 text-zinc-500">
-						It must be a combination of minimum 8 letters, numbers, and symbols.
+						Use the password connected to your account.
 					</p>
 				</div>
 
@@ -61,9 +93,15 @@ const SignInPage = () => {
 					Log In
 				</Button>
 
-				<div className="relative py-1">
+				{error && (
+					<div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+						{error}
+					</div>
+				)}
+
+				<div className="relative py-4">
 					<div className="border-t border-zinc-200" />
-					<span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-zinc-50 px-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-zinc-400">
+					<span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-400">
 						Or continue with
 					</span>
 				</div>
@@ -84,7 +122,7 @@ const SignInPage = () => {
 					Sign Up
 				</Link>
 			</div>
-		</>
+		</div>
 	);
 };
 

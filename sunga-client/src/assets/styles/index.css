@@ -3,7 +3,7 @@
 :root {
   --text: #000000;
   --text-h: #08060d;
-  --bg: #fff;
+  --bg: #f4f4f1;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
   --accent: #aa3bff;
@@ -17,8 +17,8 @@
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
+  font: 16px/150% var(--sans);
+  letter-spacing: 0;
   color-scheme: light dark;
   color: var(--text);
   background: var(--bg);
@@ -58,12 +58,25 @@ html, body {
   overflow-x: hidden;
 }
 
+body {
+  background:
+    radial-gradient(circle at top left, rgba(245, 179, 61, 0.16), transparent 32rem),
+    linear-gradient(180deg, #fafaf8 0%, var(--bg) 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  display: block;
+}
+
 #root {
   width: 100%;
   max-width: 100%;
   margin: 0;
-  text-align: center;
-  border-inline: 1px solid var(--border);
+  text-align: left;
   min-height: 100svh;
   display: flex;
   flex-direction: column;

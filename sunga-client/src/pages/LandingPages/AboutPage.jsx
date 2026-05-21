@@ -25,22 +25,22 @@ const gallery = [
 const AboutPage = () => {
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
-      <section className="overflow-hidden rounded-[2rem] border border-zinc-200 bg-white shadow-sm">
+      <section className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm shadow-zinc-950/5">
         <div className="grid gap-10 px-6 py-8 sm:px-8 sm:py-10 lg:grid-cols-[0.95fr_1.05fr] lg:px-12 lg:py-14">
-          <div className="overflow-hidden rounded-[1.75rem] border border-zinc-200">
+          <div className="overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-100">
             <img
               src="https://images.unsplash.com/photo-1516321165247-4aa89a48be28?auto=format&fit=crop&w=1400&q=80"
               alt="Designer workspace with sketches and laptop"
-              className="h-full min-h-[340px] w-full object-cover"
+              className="h-full min-h-[340px] w-full object-cover transition duration-500 hover:scale-[1.03]"
             />
           </div>
 
           <div className="flex flex-col justify-center">
-            <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.3em] text-amber-600">
+            <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-700">
               About The Studio
             </p>
 
-            <h1 className="max-w-2xl text-4xl font-bold leading-tight tracking-tight text-zinc-900 sm:text-5xl">
+            <h1 className="max-w-2xl text-4xl font-bold leading-[1.05] tracking-normal text-zinc-950 sm:text-5xl">
               A design practice shaped by clean structure and strong visual atmosphere.
             </h1>
 
@@ -67,9 +67,9 @@ const AboutPage = () => {
         {values.map((value) => (
           <article
             key={value.title}
-            className="rounded-[1.75rem] border border-zinc-200 bg-white p-6 shadow-sm"
+            className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm shadow-zinc-950/5"
           >
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-600">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500">
               Studio Value
             </p>
 
@@ -84,20 +84,20 @@ const AboutPage = () => {
         ))}
       </section>
 
-      <section className="rounded-[2rem] border border-zinc-200 bg-white px-6 py-8 shadow-sm sm:px-8 lg:px-10">
+      <section className="rounded-3xl border border-zinc-200 bg-white px-6 py-8 shadow-sm shadow-zinc-950/5 sm:px-8 lg:px-10">
         <div className="mb-8">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-amber-600">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-700">
             Process & Perspective
           </p>
 
-          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
+          <h2 className="mt-2 text-3xl font-semibold tracking-normal text-zinc-950">
             How the studio approaches creative work
           </h2>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="space-y-4">
-            <article className="rounded-[1.5rem] border border-zinc-200 bg-zinc-50 p-5">
+            <article className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
               <h3 className="text-lg font-semibold text-zinc-900">
                 Strategy First
               </h3>
@@ -108,7 +108,7 @@ const AboutPage = () => {
               </p>
             </article>
 
-            <article className="rounded-[1.5rem] border border-zinc-200 bg-zinc-50 p-5">
+            <article className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
               <h3 className="text-lg font-semibold text-zinc-900">
                 Design With Rhythm
               </h3>
@@ -119,7 +119,7 @@ const AboutPage = () => {
               </p>
             </article>
 
-            <article className="rounded-[1.5rem] border border-zinc-200 bg-zinc-50 p-5">
+            <article className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
               <h3 className="text-lg font-semibold text-zinc-900">
                 Refine for Impact
               </h3>
@@ -135,7 +135,7 @@ const AboutPage = () => {
             {gallery.map((image, index) => (
               <div
                 key={image}
-                className="overflow-hidden rounded-[1.5rem] border border-zinc-200 bg-zinc-50"
+                className="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50"
               >
                 <img
                   src={image}

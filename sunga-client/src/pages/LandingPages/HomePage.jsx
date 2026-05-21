@@ -34,14 +34,14 @@ const stats = [
 const HomePage = () => {
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
-      <section className="overflow-hidden rounded-[2rem] border border-zinc-200 bg-white shadow-sm">
+      <section className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm shadow-zinc-950/5">
         <div className="grid gap-10 px-6 py-8 sm:px-8 sm:py-10 lg:grid-cols-[1.1fr_0.9fr] lg:px-12 lg:py-14">
           <div className="flex flex-col justify-center">
-            <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.3em] text-amber-600">
+            <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-700">
               Creative Digital Studio
             </p>
 
-            <h1 className="max-w-2xl text-4xl font-bold leading-tight tracking-tight text-zinc-900 sm:text-5xl">
+            <h1 className="max-w-2xl text-4xl font-bold leading-[1.05] tracking-normal text-zinc-950 sm:text-5xl">
               Designing refined digital spaces with clarity, mood, and intent.
             </h1>
 
@@ -61,11 +61,11 @@ const HomePage = () => {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-[1.75rem] border border-zinc-200">
+          <div className="overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-100 shadow-inner">
             <img
               src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1400&q=80"
               alt="Modern workspace with creative design materials"
-              className="h-full min-h-[320px] w-full object-cover"
+              className="h-full min-h-[320px] w-full object-cover transition duration-500 hover:scale-[1.03]"
             />
           </div>
         </div>
@@ -75,25 +75,25 @@ const HomePage = () => {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-[1.75rem] border border-zinc-200 bg-white p-6 shadow-sm"
+            className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm shadow-zinc-950/5"
           >
-            <p className="text-3xl font-bold tracking-tight text-zinc-900">
+            <p className="text-3xl font-bold tracking-normal text-zinc-950">
               {stat.value}
             </p>
-            <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-500">
+            <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
               {stat.label}
             </p>
           </div>
         ))}
       </section>
 
-      <section className="rounded-[2rem] border border-zinc-200 bg-white px-6 py-8 shadow-sm sm:px-8 lg:px-10">
+      <section className="rounded-3xl border border-zinc-200 bg-white px-6 py-8 shadow-sm shadow-zinc-950/5 sm:px-8 lg:px-10">
         <div className="mb-8 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-amber-600">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-700">
               Featured Strengths
             </p>
-            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-500">
+            <h2 className="mt-2 text-3xl font-semibold tracking-normal text-zinc-950">
               Built for elegant, image-rich storytelling
             </h2>
           </div>
@@ -108,7 +108,7 @@ const HomePage = () => {
           {features.map((feature) => (
             <article
               key={feature.title}
-              className="overflow-hidden rounded-[1.75rem] border border-zinc-200 bg-zinc-50"
+              className="overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-50 transition duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-zinc-950/10"
             >
               <img
                 src={feature.image}

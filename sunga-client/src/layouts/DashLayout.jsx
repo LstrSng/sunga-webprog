@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAuth } from '../contexts/AuthContext';
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { styled, useTheme, alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -22,8 +23,10 @@ import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import AssessmentIcon from "@mui/icons-material/Assessment";
+import ArticleIcon from "@mui/icons-material/Article";
 import Button from "@mui/material/Button";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import { secondaryDashboardButtonSx } from "../utils/dashboardButtonStyles";
 
 const drawerWidth = 240;
 
@@ -37,7 +40,7 @@ const dashboardNavItems = [
   {
     label: "Reports",
     title: "Reports",
-    to: "/dashboard/reports",
+    to: "/dashboard/report",
     icon: AssessmentIcon,
   },
   {
@@ -45,6 +48,13 @@ const dashboardNavItems = [
     title: "Users",
     to: "/dashboard/users",
     icon: PeopleIcon,
+    roles: ["admin"],
+  },
+  {
+    label: "Articles",
+    title: "Articles",
+    to: "/dashboard/article",
+    icon: ArticleIcon,
   },
 ];
 
@@ -152,14 +162,34 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const getPageTitle = (pathname) =>
-  dashboardNavItems.find(({ to }) => to === pathname)?.title ?? "Welcome";
+const getDisplayName = (auth) => {
+  const firstName = auth?.firstName?.trim();
+  if (firstName) return firstName;
+
+  const emailName = auth?.email?.split("@")[0];
+  return emailName || "User";
+};
+
+const getAuthRole = (auth) => (auth?.role || auth?.type || '').toLowerCase();
+
+const isActiveNavItem = (pathname, to) => {
+  if (to === "/dashboard") {
+    return pathname === "/dashboard" || pathname === "/dashboard/";
+  }
+
+  return pathname === to || pathname.startsWith(`${to}/`);
+};
 
 const DashLayout = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const { auth, logout } = useAuth();
   const location = useLocation();
-  const pageTitle = getPageTitle(location.pathname);
+  const displayName = getDisplayName(auth);
+  const authRole = getAuthRole(auth);
+  const visibleNavItems = dashboardNavItems.filter(
+    (item) => !item.roles || item.roles.includes(authRole)
+  );
   const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
@@ -171,14 +201,24 @@ const DashLayout = () => {
   };
 
   const handleLogout = () => {
-    navigate("/");
+    logout();
+    navigate("/auth/signin");
   };
 
   return (
     <>
-      <Box sx={{ display: "flex", width: "100%", maxWidth: "100vw", overflowX: "hidden" }}>
+      <Box sx={{ display: "flex", width: "100%", maxWidth: "100vw", minHeight: "100vh", overflowX: "hidden", bgcolor: "#f4f4f5" }}>
         <CssBaseline />
-        <AppBar position="fixed" open={open}>
+        <AppBar
+          position="fixed"
+          open={open}
+          elevation={0}
+          sx={{
+            bgcolor: "rgba(24, 24, 27, 0.94)",
+            backdropFilter: "blur(14px)",
+            borderBottom: "1px solid rgba(255,255,255,0.08)",
+          }}
+        >
           <Toolbar>
             <IconButton
               color="inherit"
@@ -193,9 +233,15 @@ const DashLayout = () => {
               variant="h6"
               noWrap
               component="div"
-              sx={{ flexGrow: 1 }}
+              sx={{
+                mr: 'auto',
+                fontWeight: 700,
+                letterSpacing: 0,
+                textAlign: 'left',
+                fontSize: { xs: 16, sm: 20 },
+              }}
             >
-              {pageTitle}
+              Welcome, {displayName}
             </Typography>
             {/* Search */}
             <Search>
@@ -207,7 +253,12 @@ const DashLayout = () => {
                 inputProps={{ "aria-label": "search" }}
               />
             </Search>
-            <Button color="inherit" variant="outlined" onClick={handleLogout}>
+            <Button
+              color="inherit"
+              variant="outlined"
+              onClick={handleLogout}
+              sx={secondaryDashboardButtonSx}
+            >
               Logout
             </Button>
           </Toolbar>
@@ -224,34 +275,48 @@ const DashLayout = () => {
           </DrawerHeader>
           <Divider />
           <List>
-            {dashboardNavItems.map(({ label, to, icon }) => (
-              <ListItem key={to} disablePadding sx={{ display: "block" }}>
-                <ListItemButton
-                  component={Link}
-                  to={to}
-                  selected={location.pathname === to || location.pathname.startsWith(`${to}/`)}
-                  sx={{
-                    minHeight: 48,
-                    px: 2.5,
-                    justifyContent: open ? "initial" : "center",
-                  }}
-                >
-                  <ListItemIcon
+            {visibleNavItems.map(({ label, to, icon }) => {
+              const isActive = isActiveNavItem(location.pathname, to);
+
+              return (
+                <ListItem key={to} disablePadding sx={{ display: "block" }}>
+                  <ListItemButton
+                    component={Link}
+                    to={to}
+                    selected={isActive}
                     sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
+                      minHeight: 48,
+                      mx: 1,
+                      my: 0.5,
+                      borderRadius: 2,
+                      px: 2.5,
+                      justifyContent: open ? "initial" : "center",
+                      "&.Mui-selected": {
+                        backgroundColor: "rgba(245, 158, 11, 0.16)",
+                      },
+                      "&.Mui-selected:hover": {
+                        backgroundColor: "rgba(245, 158, 11, 0.22)",
+                      },
                     }}
                   >
-                    <Box component={icon} />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={label}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                        color: isActive ? "#b45309" : "inherit",
+                      }}
+                    >
+                      <Box component={icon} />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={label}
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
           </List>
         </Drawer>
         <Box
@@ -263,6 +328,7 @@ const DashLayout = () => {
             maxWidth: "100%",
             p: { xs: 2, sm: 3 },
             overflowX: "hidden",
+            bgcolor: "#f4f4f5",
           }}
         >
           <DrawerHeader />

@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 
 import Layout from "./layouts/Layout";
 import ArticlePage from "./pages/LandingPages/ArticlePage";
@@ -13,6 +13,9 @@ import SignUpPage from "./pages/AuthPages/SignUpPage";
 import DashboardPage from "./pages/DashboardPages/DashboardPage";
 import ReportsPage from "./pages/DashboardPages/ReportsPage";
 import UsersPage from "./pages/DashboardPages/UserPage";
+import DashArticleListPage from "./pages/DashboardPages/DashArticleListPage";
+import { AuthProvider } from "./contexts/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import NotFoundPage from "./pages/NotFoundPage";
 
@@ -57,7 +60,11 @@ const routes = [
   },
   {
     path: "dashboard/",
-    element: <DashLayout />,
+    element: (
+      <ProtectedRoute>
+        <DashLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <NotFoundPage />,
     children: [
       {
@@ -65,12 +72,28 @@ const routes = [
         element: <DashboardPage />,
       },
       {
-        path: "reports",
+        path: "report",
         element: <ReportsPage />,
       },
       {
+        path: "reports",
+        element: <Navigate to="/dashboard/report" replace />,
+      },
+      {
         path: "users",
-        element: <UsersPage />,
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <UsersPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "article",
+        element: <DashArticleListPage />,
+      },
+      {
+        path: "articles",
+        element: <Navigate to="/dashboard/article" replace />,
       },
     ],
   },
@@ -80,9 +103,9 @@ const router = createBrowserRouter(routes);
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <RouterProvider router={router} />
-    </>
+    </AuthProvider>
   );
 }
 

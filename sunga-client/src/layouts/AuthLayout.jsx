@@ -2,11 +2,11 @@ import { Outlet } from 'react-router-dom';
 
 const AuthLayout = () => {
 	return (
-		<section className="min-h-screen bg-gradient-to-br from-fuchsia-300 via-rose-200 to-amber-200 text-zinc-900">
+		<section className="min-h-screen bg-zinc-100 text-zinc-900">
 			<div className="grid min-h-screen w-full lg:grid-cols-[1fr_0.95fr]">
-				<div className="flex items-center justify-center bg-gradient-to-br from-violet-400/80 via-fuchsia-300/75 to-amber-300/75 p-8 sm:p-10 lg:p-16">
-					<div className="flex w-full max-w-xl items-center justify-center p-10 sm:p-12">
-						<div className="flex aspect-square w-full max-w-[24rem] flex-col items-center justify-center">
+				<div className="flex items-center justify-center bg-[linear-gradient(135deg,#18181b_0%,#3f3f46_48%,#f59e0b_100%)] p-8 text-white sm:p-10 lg:p-16">
+					<div className="flex w-full max-w-xl items-center justify-center rounded-3xl border border-white/15 bg-white/10 p-10 shadow-2xl shadow-zinc-950/20 backdrop-blur-sm sm:p-12">
+						<div className="flex aspect-square w-full max-w-[24rem] flex-col items-center justify-center text-center">
 							<div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-amber-300 text-zinc-950 shadow-sm sm:h-28 sm:w-28">
 								<svg viewBox="0 0 48 48" className="h-12 w-12 sm:h-14 sm:w-14" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<path
@@ -25,15 +25,15 @@ const AuthLayout = () => {
 									/>
 								</svg>
 							</div>
-							<p className="mt-6 text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">LS Studio</p>
-							<p className="mt-2 text-xs uppercase tracking-[0.32em] text-zinc-500 sm:text-sm">
+							<p className="mt-6 text-3xl font-bold tracking-normal text-white sm:text-4xl">LS Studio</p>
+							<p className="mt-2 text-xs uppercase tracking-[0.22em] text-zinc-200 sm:text-sm">
 								Visual Stories &amp; Design
 							</p>
 						</div>
 					</div>
 				</div>
 
-				<main className="flex items-center bg-white/80 backdrop-blur-sm px-6 py-10 sm:px-10 lg:px-16">
+				<main className="flex items-center bg-white px-6 py-10 sm:px-10 lg:px-16">
 					<div className="mx-auto w-full max-w-md">
 						<Outlet />
 					</div>
