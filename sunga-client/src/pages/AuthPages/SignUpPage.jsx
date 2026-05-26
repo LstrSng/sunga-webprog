@@ -7,12 +7,54 @@ const inputClasses =
 	'mt-2 w-full rounded-2xl border border-zinc-300 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-900 focus:bg-white focus:ring-4 focus:ring-zinc-900/5';
 
 const actionButtonClassName = 'w-full rounded-2xl py-3 text-[11px] tracking-[0.16em]';
+const errorTextClasses = 'mt-2 text-xs font-medium text-red-600';
+
+const validateSignUpForm = (formState) => {
+	const errors = {};
+	const age = formState.age.trim();
+	const contactNumber = formState.contactNumber.trim();
+	const username = formState.username.trim();
+	const password = formState.password.trim();
+
+	if (!formState.firstName.trim()) errors.firstName = 'First name is required';
+	if (!formState.lastName.trim()) errors.lastName = 'Last name is required';
+	if (!formState.email.trim()) errors.email = 'Email is required';
+	if (!formState.gender.trim()) errors.gender = 'Gender is required';
+	if (!formState.address.trim()) errors.address = 'Address is required';
+
+	if (!age) {
+		errors.age = 'Age is required';
+	} else if (!/^\d+$/.test(age)) {
+		errors.age = 'Age must be a number only';
+	}
+
+	if (!contactNumber) {
+		errors.contactNumber = 'Contact number is required';
+	} else if (!/^\d{11}$/.test(contactNumber)) {
+		errors.contactNumber = 'Contact number must be 11 digits';
+	}
+
+	if (!username) {
+		errors.username = 'Username is required';
+	} else if (/\s/.test(username)) {
+		errors.username = 'Username must not contain spaces';
+	}
+
+	if (!password) {
+		errors.password = 'Password is required';
+	} else if (password.length < 8) {
+		errors.password = 'Password must be at least 8 characters';
+	}
+
+	return errors;
+};
 
 const SignUpPage = () => {
 	const navigate = useNavigate();
 	const [formState, setFormState] = useState({
 		firstName: '',
 		lastName: '',
+		username: '',
 		email: '',
 		password: '',
 		age: '',
@@ -22,6 +64,7 @@ const SignUpPage = () => {
 		role: 'editor',
 	});
 	const [error, setError] = useState('');
+	const [fieldErrors, setFieldErrors] = useState({});
 	const [success, setSuccess] = useState('');
 	const [loading, setLoading] = useState(false);
 
@@ -36,7 +79,16 @@ const SignUpPage = () => {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		setError('');
+		setFieldErrors({});
 		setSuccess('');
+
+		const validationErrors = validateSignUpForm(formState);
+		if (Object.keys(validationErrors).length > 0) {
+			setFieldErrors(validationErrors);
+			setError('Please fix the highlighted fields.');
+			return;
+		}
+
 		setLoading(true);
 		try {
 			const email = formState.email.trim().toLowerCase();
@@ -44,6 +96,7 @@ const SignUpPage = () => {
 				...formState,
 				firstName: formState.firstName.trim(),
 				lastName: formState.lastName.trim(),
+				username: formState.username.trim(),
 				email,
 				age: formState.age.trim(),
 				gender: formState.gender.trim(),
@@ -51,13 +104,8 @@ const SignUpPage = () => {
 				address: formState.address.trim(),
 			};
 
-			const generatedUsername =
-				email.split('@')[0] ||
-				`${userToCreate.firstName}${userToCreate.lastName}`.trim().toLowerCase();
-
 			await createUser({
 				...userToCreate,
-				username: generatedUsername,
 				type: userToCreate.role,
 				isActive: true,
 			});
@@ -101,6 +149,7 @@ const SignUpPage = () => {
 							className={inputClasses}
 							required
 						/>
+						{fieldErrors.firstName && <p className={errorTextClasses}>{fieldErrors.firstName}</p>}
 					</div>
 					<div>
 						<label htmlFor="last-name" className="text-sm font-medium text-zinc-700">
@@ -117,6 +166,7 @@ const SignUpPage = () => {
 							className={inputClasses}
 							required
 						/>
+						{fieldErrors.lastName && <p className={errorTextClasses}>{fieldErrors.lastName}</p>}
 					</div>
 				</div>
 
@@ -135,6 +185,7 @@ const SignUpPage = () => {
 							className={inputClasses}
 							required
 						/>
+						{fieldErrors.age && <p className={errorTextClasses}>{fieldErrors.age}</p>}
 					</div>
 					<div>
 						<label htmlFor="signup-gender" className="text-sm font-medium text-zinc-700">
@@ -153,7 +204,26 @@ const SignUpPage = () => {
 							<option value="Female">Female</option>
 							<option value="Other">Other</option>
 						</select>
+						{fieldErrors.gender && <p className={errorTextClasses}>{fieldErrors.gender}</p>}
 					</div>
+				</div>
+
+				<div>
+					<label htmlFor="signup-username" className="text-sm font-medium text-zinc-700">
+						Username
+					</label>
+					<input
+						id="signup-username"
+						name="username"
+						value={formState.username}
+						onChange={handleChange}
+						type="text"
+						placeholder="Username"
+						autoComplete="username"
+						className={inputClasses}
+						required
+					/>
+					{fieldErrors.username && <p className={errorTextClasses}>{fieldErrors.username}</p>}
 				</div>
 
 				<div>
@@ -171,6 +241,7 @@ const SignUpPage = () => {
 						className={inputClasses}
 						required
 					/>
+					{fieldErrors.email && <p className={errorTextClasses}>{fieldErrors.email}</p>}
 				</div>
 
 				<div>
@@ -187,6 +258,7 @@ const SignUpPage = () => {
 						className={inputClasses}
 						required
 					/>
+					{fieldErrors.contactNumber && <p className={errorTextClasses}>{fieldErrors.contactNumber}</p>}
 				</div>
 
 				<div>
@@ -203,6 +275,7 @@ const SignUpPage = () => {
 						className={inputClasses}
 						required
 					/>
+					{fieldErrors.address && <p className={errorTextClasses}>{fieldErrors.address}</p>}
 				</div>
 
 				<div>
@@ -221,8 +294,9 @@ const SignUpPage = () => {
 						required
 					/>
 					<p className="mt-2 text-xs leading-5 text-zinc-500">
-						Use a secure password with letters, numbers, and symbols.
+						Use at least 8 characters.
 					</p>
+					{fieldErrors.password && <p className={errorTextClasses}>{fieldErrors.password}</p>}
 				</div>
 
 				<Button type="submit" variant="primary" className={actionButtonClassName} disabled={loading}>

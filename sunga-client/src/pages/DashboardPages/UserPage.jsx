@@ -96,16 +96,36 @@ const emptyUser = {
 
 const validateUserForm = (user, isEditing) => {
     const errors = {};
+    const age = String(user.age || '').trim();
+    const contactNumber = user.contactNumber.trim();
+    const username = user.username.trim();
+    const password = user.password.trim();
 
     if (!user.firstName.trim()) errors.firstName = 'First name is required';
     if (!user.lastName.trim()) errors.lastName = 'Last name is required';
-    if (!String(user.age || '').trim()) errors.age = 'Age is required';
+    if (!age) {
+        errors.age = 'Age is required';
+    } else if (!/^\d+$/.test(age)) {
+        errors.age = 'Age must be a number only';
+    }
     if (!user.gender.trim()) errors.gender = 'Gender is required';
-    if (!user.contactNumber.trim()) errors.contactNumber = 'Contact number is required';
+    if (!contactNumber) {
+        errors.contactNumber = 'Contact number is required';
+    } else if (!/^\d{11}$/.test(contactNumber)) {
+        errors.contactNumber = 'Contact number must be 11 digits';
+    }
     if (!user.email.trim()) errors.email = 'Email address is required';
-    if (!user.username.trim()) errors.username = 'Username is required';
+    if (!username) {
+        errors.username = 'Username is required';
+    } else if (/\s/.test(username)) {
+        errors.username = 'Username must not contain spaces';
+    }
     if (!user.address.trim()) errors.address = 'Address is required';
-    if (!isEditing && !user.password.trim()) errors.password = 'Password is required';
+    if (!isEditing && !password) {
+        errors.password = 'Password is required';
+    } else if (password && password.length < 8) {
+        errors.password = 'Password must be at least 8 characters';
+    }
 
     return errors;
 };
