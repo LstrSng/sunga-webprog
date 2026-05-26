@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -93,6 +94,22 @@ const emptyUser = {
     isActive: true,
 };
 
+const validateUserForm = (user, isEditing) => {
+    const errors = {};
+
+    if (!user.firstName.trim()) errors.firstName = 'First name is required';
+    if (!user.lastName.trim()) errors.lastName = 'Last name is required';
+    if (!String(user.age || '').trim()) errors.age = 'Age is required';
+    if (!user.gender.trim()) errors.gender = 'Gender is required';
+    if (!user.contactNumber.trim()) errors.contactNumber = 'Contact number is required';
+    if (!user.email.trim()) errors.email = 'Email address is required';
+    if (!user.username.trim()) errors.username = 'Username is required';
+    if (!user.address.trim()) errors.address = 'Address is required';
+    if (!isEditing && !user.password.trim()) errors.password = 'Password is required';
+
+    return errors;
+};
+
 const UsersPage = () => {
     const { auth } = useAuth();
     const canManageUsers = getAuthRole(auth) === 'admin';
@@ -104,7 +121,10 @@ const UsersPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [formError, setFormError] = useState('');
+    const [fieldErrors, setFieldErrors] = useState({});
     const [search, setSearch] = useState('');
+    const [roleFilter, setRoleFilter] = useState('all');
+    const [genderFilter, setGenderFilter] = useState('all');
     const [statusFilter, setStatusFilter] = useState('all');
 
     const loadUsers = async () => {
@@ -128,21 +148,25 @@ const UsersPage = () => {
         const query = search.trim().toLowerCase();
         const matchesSearch =
             !query ||
-            user.name.toLowerCase().includes(query) ||
-            user.username.toLowerCase().includes(query) ||
+            user.firstName.toLowerCase().includes(query) ||
+            user.lastName.toLowerCase().includes(query) ||
             user.email.toLowerCase().includes(query) ||
-            user.role.toLowerCase().includes(query);
+            user.username.toLowerCase().includes(query);
+        const matchesRole = roleFilter === 'all' || user.role === roleFilter;
+        const matchesGender =
+            genderFilter === 'all' || user.gender.toLowerCase() === genderFilter;
         const matchesStatus =
             statusFilter === 'all' ||
             (statusFilter === 'active' && user.isActive) ||
             (statusFilter === 'inactive' && !user.isActive);
 
-        return matchesSearch && matchesStatus;
+        return matchesSearch && matchesRole && matchesGender && matchesStatus;
     });
 
     const handleOpen = () => {
         if (!canManageUsers) return;
         setFormError('');
+        setFieldErrors({});
         setIsEditing(false);
         setNewUser(emptyUser);
         setOpen(true);
@@ -153,6 +177,7 @@ const UsersPage = () => {
         setIsEditing(false);
         setEditUserId(null);
         setFormError('');
+        setFieldErrors({});
     };
 
     const handleEdit = (id) => {
@@ -160,6 +185,8 @@ const UsersPage = () => {
         const userToEdit = users.find((user) => user._id === id);
         if (userToEdit) {
             setNewUser({ ...userToEdit, password: '' });
+            setFieldErrors({});
+            setFormError('');
             setEditUserId(id);
             setIsEditing(true);
             setOpen(true);
@@ -168,6 +195,13 @@ const UsersPage = () => {
 
     const handleSaveUser = async () => {
         if (!canManageUsers) return;
+        const validationErrors = validateUserForm(newUser, isEditing);
+        setFieldErrors(validationErrors);
+        if (Object.keys(validationErrors).length > 0) {
+            setFormError('Please complete the required fields.');
+            return;
+        }
+
         const userToSave = {
             ...newUser,
             firstName: newUser.firstName.trim(),
@@ -185,6 +219,7 @@ const UsersPage = () => {
         try {
             setError('');
             setFormError('');
+            setFieldErrors({});
             if (isEditing) {
                 const updatedUser = { ...userToSave };
                 if (!updatedUser.password) {
@@ -343,15 +378,43 @@ const UsersPage = () => {
                     <TextField
                         fullWidth
                         size="small"
-                        placeholder="Search Users"
+                        label="Search Users"
+                        placeholder="First name, last name, email, or username"
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
                     />
+                    <FormControl size="small" sx={{ minWidth: { xs: '100%', md: 170 } }}>
+                        <InputLabel id="user-role-filter-label">Role</InputLabel>
+                        <Select
+                            labelId="user-role-filter-label"
+                            label="Role"
+                            value={roleFilter}
+                            onChange={(event) => setRoleFilter(event.target.value)}
+                        >
+                            <MenuItem value="all">All Roles</MenuItem>
+                            <MenuItem value="admin">Admin</MenuItem>
+                            <MenuItem value="editor">Editor</MenuItem>
+                            <MenuItem value="viewer">Viewer</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl size="small" sx={{ minWidth: { xs: '100%', md: 170 } }}>
+                        <InputLabel id="user-gender-filter-label">Gender</InputLabel>
+                        <Select
+                            labelId="user-gender-filter-label"
+                            label="Gender"
+                            value={genderFilter}
+                            onChange={(event) => setGenderFilter(event.target.value)}
+                        >
+                            <MenuItem value="all">All Genders</MenuItem>
+                            <MenuItem value="male">Male</MenuItem>
+                            <MenuItem value="female">Female</MenuItem>
+                        </Select>
+                    </FormControl>
                     <FormControl size="small" sx={{ minWidth: { xs: '100%', md: 220 } }}>
-                        <InputLabel id="user-status-filter-label">Status Filter</InputLabel>
+                        <InputLabel id="user-status-filter-label">Status</InputLabel>
                         <Select
                             labelId="user-status-filter-label"
-                            label="Status Filter"
+                            label="Status"
                             value={statusFilter}
                             onChange={(event) => setStatusFilter(event.target.value)}
                         >
@@ -379,18 +442,19 @@ const UsersPage = () => {
                         sx={{ mt: 2, pr: 0.5, overflowY: 'auto' }}
                     >
                         <Box sx={formGridSx}>
-                            <TextField fullWidth size="small" label="First Name" value={newUser.firstName} onChange={(e) => setNewUser({ ...newUser, firstName: e.target.value })} />
-                            <TextField fullWidth size="small" label="Last Name" value={newUser.lastName} onChange={(e) => setNewUser({ ...newUser, lastName: e.target.value })} />
-                            <TextField fullWidth size="small" label="Age" value={newUser.age} onChange={(e) => setNewUser({ ...newUser, age: e.target.value })} />
-                            <FormControl fullWidth size="small">
+                            <TextField fullWidth size="small" label="First Name" value={newUser.firstName} onChange={(e) => setNewUser({ ...newUser, firstName: e.target.value })} error={Boolean(fieldErrors.firstName)} helperText={fieldErrors.firstName} />
+                            <TextField fullWidth size="small" label="Last Name" value={newUser.lastName} onChange={(e) => setNewUser({ ...newUser, lastName: e.target.value })} error={Boolean(fieldErrors.lastName)} helperText={fieldErrors.lastName} />
+                            <TextField fullWidth size="small" label="Age" value={newUser.age} onChange={(e) => setNewUser({ ...newUser, age: e.target.value })} error={Boolean(fieldErrors.age)} helperText={fieldErrors.age} />
+                            <FormControl fullWidth size="small" error={Boolean(fieldErrors.gender)}>
                                 <InputLabel id="gender-label">Gender</InputLabel>
                                 <Select labelId="gender-label" label="Gender" value={newUser.gender} onChange={(e) => setNewUser({ ...newUser, gender: e.target.value })}>
                                     <MenuItem value="male">Male</MenuItem>
                                     <MenuItem value="female">Female</MenuItem>
                                 </Select>
+                                {fieldErrors.gender && <FormHelperText>{fieldErrors.gender}</FormHelperText>}
                             </FormControl>
-                            <TextField fullWidth size="small" label="Contact Number" value={newUser.contactNumber} onChange={(e) => setNewUser({ ...newUser, contactNumber: e.target.value })} />
-                            <TextField fullWidth size="small" label="Email Address" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} />
+                            <TextField fullWidth size="small" label="Contact Number" value={newUser.contactNumber} onChange={(e) => setNewUser({ ...newUser, contactNumber: e.target.value })} error={Boolean(fieldErrors.contactNumber)} helperText={fieldErrors.contactNumber} />
+                            <TextField fullWidth size="small" label="Email Address" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} error={Boolean(fieldErrors.email)} helperText={fieldErrors.email} />
                             <FormControl fullWidth size="small">
                                 <InputLabel id="role-label">Role</InputLabel>
                                 <Select labelId="role-label" label="Role" value={newUser.role || 'viewer'} onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}>
@@ -399,9 +463,9 @@ const UsersPage = () => {
                                     <MenuItem value="viewer">Viewer</MenuItem>
                                 </Select>
                             </FormControl>
-                            <TextField fullWidth size="small" label="Username" value={newUser.username} onChange={(e) => setNewUser({ ...newUser, username: e.target.value })} />
-                            <TextField fullWidth size="small" label="Password" type="password" value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} sx={{ gridColumn: { xs: 'auto', sm: '1 / -1' } }} />
-                            <TextField fullWidth size="small" label="Address" multiline minRows={3} value={newUser.address} onChange={(e) => setNewUser({ ...newUser, address: e.target.value })} sx={{ gridColumn: '1 / -1' }} />
+                            <TextField fullWidth size="small" label="Username" value={newUser.username} onChange={(e) => setNewUser({ ...newUser, username: e.target.value })} error={Boolean(fieldErrors.username)} helperText={fieldErrors.username} />
+                            <TextField fullWidth size="small" label={isEditing ? 'Password (leave blank to keep current)' : 'Password'} type="password" value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} error={Boolean(fieldErrors.password)} helperText={fieldErrors.password} sx={{ gridColumn: { xs: 'auto', sm: '1 / -1' } }} />
+                            <TextField fullWidth size="small" label="Address" multiline minRows={3} value={newUser.address} onChange={(e) => setNewUser({ ...newUser, address: e.target.value })} error={Boolean(fieldErrors.address)} helperText={fieldErrors.address} sx={{ gridColumn: '1 / -1' }} />
                         </Box>
                         {formError && (
                             <Typography color="error" sx={{ mt: 2 }}>
